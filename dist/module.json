@@ -1,0 +1,21 @@
+{
+  "name": "WeaponsDrawn",
+  "title": "Weapons Drawn",
+  "description": "A module for D&D 5e, that will automatically swap to an alternate token image when in the combat state.",
+  "systems": [
+    "dnd5e"
+  ],
+  "version": "0.1",
+  "author": "Vanir#0001 (discord)",
+  "esmodules": [
+    "WeaponsDrawn.js"
+  ],
+  "styles": [
+    "WeaponsDrawn.css"
+  ],
+  "minimumCoreVersion": "0.7.9",
+  "compatibleCoreVersion": "0.7.9",
+  "url": "https://github.com/VanirDev/WeaponsDrawn",
+  "manifest": "https://raw.githubusercontent.com/VanirDev/WeaponsDrawn/master/dist/module.json",
+  "download": "https://github.com/VanirDev/WeaponsDrawn/raw/master/WeaponsDrawn.zip"
+}
