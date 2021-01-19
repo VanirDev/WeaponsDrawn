@@ -33,7 +33,7 @@ Every actor now has a toggle for WD token images. When enabled, the standard tok
 ## Installation
 
 1. Open the "Add-On Modules" tab inside the FoundryVTT setup section.
-2. Click "Install Module" and paste this link into the "Manifest URL" box: https://raw.githubusercontent.com/VanirDev/WeaponsDrawn/master/dist/module.json
+2. Click "Install Module" and paste this link into the "Manifest URL" box: https://raw.githubusercontent.com/VanirDev/WeaponsDrawn/main/module.json
 3. Click "Install", and once the module has finished installing enable the module in "Manage Modules" in the "Game Settings" tab.
 
 ## License

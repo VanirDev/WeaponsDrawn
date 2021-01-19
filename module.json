@@ -17,5 +17,5 @@
     "compatibleCoreVersion": "0.7.9",
     "url": "https://github.com/VanirDev/WeaponsDrawn",
     "manifest": "https://raw.githubusercontent.com/VanirDev/WeaponsDrawn/main/module.json",
-    "download": "https://github.com/VanirDev/WeaponsDrawn/blob/main/WeaponsDrawn.zip?raw=true"
+    "download": "https://github.com/VanirDev/WeaponsDrawn/raw/main/WeaponsDrawn.zip"
   }
