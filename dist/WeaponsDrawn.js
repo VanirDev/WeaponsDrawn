@@ -114,8 +114,8 @@ function updateTokenImg (tokenId, inCombat, tokenImgPath, sceneId) {
 }
 
 function onRenderTokenConfig (tokenConfig, html) {
-	const tokenImageDiv = $("input.image").parent().parent();
-	const saveButton = $('button[name="submit"]')
+	const tokenImageDiv = html.find($("input.image")).parent().parent();
+	const saveButton = html.find($('button[name="submit"]'))
 	let actorEntity = game.actors.get(tokenConfig.actor.data._id);
 	console.log(tokenImageDiv.parent());
 	// console.log(tokenImageDiv);
@@ -141,7 +141,7 @@ function onRenderTokenConfig (tokenConfig, html) {
 	idleTokenImage = idleTokenImage == "" || idleTokenImage == undefined ? defaultIcon : idleTokenImage;
 	combatTokenImage = combatTokenImage == "" || combatTokenImage == undefined ? defaultIcon : combatTokenImage;
 	
-	$('label:contains("Token Image Path:")').text("Default Token Image:");
+	html.find($('label:contains("Token Image Path:")')).text("Default Token Image:");
 	
 	const headerHTML = 
 		`<div class="form-group">
@@ -157,7 +157,7 @@ function onRenderTokenConfig (tokenConfig, html) {
 					<i class="fas fa-file-import fa-fw">
 					</i>
 				</button>
-				<input id="WDIdleTokenPathBox" class="image" type="text" name="imgIdle" placeholder="${idleTokenImage}" value="">
+				<input id="WDIdleTokenPathBox" class="image" type="text" name="imgIdle" placeholder="path/image.png" value="${idleTokenImage}" value="">
 			</div>
 		</div>`;
 
@@ -169,7 +169,7 @@ function onRenderTokenConfig (tokenConfig, html) {
 					<i class="fas fa-file-import fa-fw">
 					</i>
 				</button>
-				<input id="WDCombatTokenPathBox" class="image" type="text" name="imgCombat" placeholder="${combatTokenImage}" value="">
+				<input id="WDCombatTokenPathBox" class="image" type="text" name="imgCombat" placeholder="path/image.png" value="${combatTokenImage}" value="">
 			</div>
 		</div>`;
 
@@ -182,25 +182,25 @@ function onRenderTokenConfig (tokenConfig, html) {
 		tokenImageDiv.prev().hide();
 		tokenImageDiv.show()
 	} else {
-		$('input#WDEnableCheckbox').prop('checked', true);
+		html.find($('input#WDEnableCheckbox')).prop('checked', true);
 		tokenImageDiv.hide();
 	}
 
-	$('#WDIdleTokenButton').click(async (ev) => {
+	html.find($('#WDIdleTokenButton')).click(async (ev) => {
 		await new FilePicker({ type:"image", current:idleTokenImage, callback: (path) => {
-			$("#WDIdleTokenPathBox").val(path);
+			html.find($("#WDIdleTokenPathBox")).val(path);
 			//$('input[name="img"]').val(path);
 			idleTokenImage = path;
 		}}).render(true);
 	});
-	$('#WDCombatTokenButton').click(async (ev) => {
+	html.find($('#WDCombatTokenButton')).click(async (ev) => {
 		await new FilePicker({ type:"image", current:combatTokenImage, callback: (path) => {
-			$("#WDCombatTokenPathBox").val(path);
+			html.find($("#WDCombatTokenPathBox")).val(path);
 			combatTokenImage = path;
 		}}).render(true);
 	});
-	$('input#WDEnableCheckbox').change(function() {
-		wdEnabled = $('input#WDEnableCheckbox').is(":checked");
+	html.find($('input#WDEnableCheckbox')).change(function() {
+		wdEnabled = html.find($('input#WDEnableCheckbox')).is(":checked");
 		console.log(wdEnabled);
 		if (!wdEnabled) {
 			tokenImageDiv.prev().prev().hide();
