@@ -18,13 +18,13 @@ A visual utility plugin, which allows characters to have a secondary token image
 
 ### Dynamic Token Switch
 
-![]()
+![](https://github.com/VanirDev/WeaponsDrawn/blob/main/assets/WeaponsDrawn.gif)
 
 Tokens configured with this module will automatically swap their token when entering/leaving a combat state.
 
 ### Settings UI
 
-![]()
+![](https://github.com/VanirDev/WeaponsDrawn/blob/main/assets/SettingsUI.png)
 
 Every actor now has a toggle for WD token images. When enabled, the standard token path input is replaced by two inputs, which are used for out of combat and in combat states.
 
