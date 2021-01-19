@@ -44,17 +44,95 @@ Hooks.once('ready', function () {
 });
 
 Hooks.on('renderTokenConfig', onRenderTokenConfig);
+Hooks.on('createCombatant', onCreateCombatant);
+Hooks.on('deleteCombatant', onDeleteCombatant);
+
+function onCreateCombatant (combat, combatant, _, userId) {
+	if (game.userId !== userId) {
+		// Only act if we initiated the update ourselves
+		return;
+	}
+
+	let token = game.scenes.get(combat.data.scene).getEmbeddedEntity("Token", combatant.tokenId);
+	//console.log(JSON.stringify(token));
+	const actorEntity = game.actors.get(token.actorId);
+	const tokenImgPath = getStateTokenImgPath(actorEntity, true);
+	combat.updateCombatant({_id:combatant._id, img: tokenImgPath});
+	updateTokenImg(token._id, true, tokenImgPath, combat.data.scene);
+}
+
+function onDeleteCombatant (combat, combatant, _, userId) {
+	if (game.userId !== userId) {
+		// Only act if we initiated the update ourselves
+		return;
+	}
+
+	const actorEntity = game.actors.get(combatant.actor.data._id);
+	const tokenImgPath = getStateTokenImgPath(actorEntity, false);
+	updateTokenImg(combatant.token._id, true, tokenImgPath, combat.data.scene);
+}
+
+function getStateTokenImgPath (actorEntity, inCombat) {
+	let idleTokenImage = "";
+	let combatTokenImage = "";
+
+	if (actorEntity.data.flags.hasOwnProperty("WeaponsDrawn")) {
+		idleTokenImage = actorEntity.getFlag("WeaponsDrawn", "idle");
+		combatTokenImage = actorEntity.getFlag("WeaponsDrawn", "combat");
+		// console.log(idleTokenImage);
+		// console.log(combatTokenImage);
+	}
+	if (idleTokenImage == "" || idleTokenImage == undefined) {
+		idleTokenImage = actorEntity.data.img;
+		if (combatTokenImage == "" || combatTokenImage == undefined) {
+			combatTokenImage = idleTokenImage;
+		}
+	}
+
+	// console.log(idleTokenImage);
+	// console.log(combatTokenImage);
+	return inCombat ? combatTokenImage : idleTokenImage;
+}
+
+function updateTokenImg (tokenId, inCombat, tokenImgPath, sceneId) {
+	tokenImgPath = tokenImgPath == undefined ? getStateTokenImgPath(game.actors.get(token.actorId), inCombat) : tokenImgPath;
+	// console.log(tokenId);
+	// console.log(sceneId);
+	game.scenes.get(sceneId).updateEmbeddedEntity("Token", {_id: tokenId, img:tokenImgPath});
+}
 
 function onRenderTokenConfig (tokenConfig, html) {
 	const tokenImageDiv = $("input.image").parent().parent();
-	console.log(tokenImageDiv);
+	const saveButton = $('button[name="submit"]')
+	let actorEntity = game.actors.get(tokenConfig.actor.data._id);
+	// console.log(tokenImageDiv);
+	// console.log(saveButton);
+	// console.log(actorEntity);
+
+	let idleTokenImage = "";
+	let combatTokenImage = "";
+
+	if (actorEntity.data.flags.hasOwnProperty("WeaponsDrawn")) {
+		idleTokenImage = actorEntity.getFlag("WeaponsDrawn", "idle");
+		combatTokenImage = actorEntity.getFlag("WeaponsDrawn", "combat");
+	}
+	if (idleTokenImage == "" || idleTokenImage == undefined) {
+		idleTokenImage = actorEntity.data.img;
+		if (combatTokenImage == "" || combatTokenImage == undefined) {
+			combatTokenImage = idleTokenImage;
+		}
+	}
+
+	idleTokenImage = idleTokenImage == "" || idleTokenImage == undefined ? defaultIcon : idleTokenImage;
+	combatTokenImage = combatTokenImage == "" || combatTokenImage == undefined ? defaultIcon : combatTokenImage;
 	
-	let headerHTML = 
+	
+	const headerHTML = 
 		`<div class="form-group">
 			<label>Token Icons</label>
 		</div>`;
 
-	let defaultIconHTML = 
+	const defaultIconHTML = 
 		`<div class="form-group">
 			<label>Out of Combat Token Image:</label>
 			<div class="form-fields">
@@ -62,11 +140,11 @@ function onRenderTokenConfig (tokenConfig, html) {
 					<i class="fas fa-file-import fa-fw">
 					</i>
 				</button>
-				<input id="WDIdleTokenPathBox" class="image" type="text" name="imgIdle" placeholder="path/image.png" value="">
+				<input id="WDIdleTokenPathBox" class="image" type="text" name="imgIdle" placeholder="${idleTokenImage}" value="">
 			</div>
 		</div>`;
 
-	let combatIconHTML = 
+	const combatIconHTML = 
 		`<div class="form-group">
 			<label>In Combat Token Image:</label>
 			<div class="form-fields">
@@ -74,7 +152,7 @@ function onRenderTokenConfig (tokenConfig, html) {
 					<i class="fas fa-file-import fa-fw">
 					</i>
 				</button>
-				<input id="WDCombatTokenPathBox" class="image" type="text" name="imgCombat" placeholder="path/image.png" value="">
+				<input id="WDCombatTokenPathBox" class="image" type="text" name="imgCombat" placeholder="${combatTokenImage}" value="">
 			</div>
 		</div>`;
 
@@ -84,13 +162,49 @@ function onRenderTokenConfig (tokenConfig, html) {
 	tokenImageDiv.hide();
 
 	tokenImageDiv.prev().prev().click(async (ev) => {
-		await new FilePicker({ callback: (path) => {
+		await new FilePicker({ type:"image", current:idleTokenImage, callback: (path) => {
 			$("#WDIdleTokenPathBox").val(path);
+			//$('input[name="img"]').val(path);
+			idleTokenImage = path;
 		}}).render(true);
 	});
 	tokenImageDiv.prev().click(async (ev) => {
-		await new FilePicker({ callback: (path) => {
+		await new FilePicker({ type:"image", current:combatTokenImage, callback: (path) => {
 			$("#WDCombatTokenPathBox").val(path);
+			combatTokenImage = path;
 		}}).render(true);
+	});
+	saveButton.bind("click", function() {
+		actorEntity.setFlag("WeaponsDrawn", "idle", idleTokenImage);
+		actorEntity.setFlag("WeaponsDrawn", "combat", combatTokenImage);
+
+		let inCombatTokens = [];
+		let idleTokens = [];
+		game.combats.forEach((combat, combatKey) => {
+			combat = game.combats.get(combatKey);
+			if (combat.data.active) {
+				//console.log(combat);
+				combat.data.combatants.forEach(combatant => {
+					if (combatant.actor.data._id == actorEntity.data._id) {
+						combat.updateCombatant({_id:combatant._id, img: combatTokenImage});
+						updateTokenImg(combatant.token._id, true, combatTokenImage, combat.data.scene);
+						inCombatTokens.push(combatant.token._id);
+					}
+				});
+			}
+		});
+		
+		game.scenes.forEach((scene, sceneKey) => {
+			scene.data.tokens.forEach(token => {
+				if (token.actorId == actorEntity.data._id && !inCombatTokens.includes(token._id)) {
+					updateTokenImg(token._id, false, idleTokenImage, sceneKey);
+					idleTokens.push(token._id);
+				}
+			})
+		})
+
+		// console.log(inCombatTokens);
+		// console.log(idleTokens);
+		// console.log(game.scenes);
 	});
 }
