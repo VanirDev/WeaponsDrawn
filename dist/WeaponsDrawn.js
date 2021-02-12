@@ -46,7 +46,6 @@ Hooks.once('ready', function () {
 Hooks.on('renderTokenConfig', onRenderTokenConfig);
 Hooks.on('createCombatant', onCreateCombatant);
 Hooks.on('deleteCombatant', onDeleteCombatant);
-Hooks.on('deleteCombat', onDeleteCombat);
 Hooks.on('createToken', onCreateToken);
 
 function onCreateToken (scene, token, _, userId) {
@@ -81,19 +80,6 @@ function onDeleteCombatant (combat, combatant, _, userId) {
 	const actorEntity = game.actors.get(combatant.actor.data._id);
 	const tokenImgPath = getStateTokenImgPath(actorEntity, false);
 	updateTokenImg(combatant.token._id, true, tokenImgPath, combat.data.scene);
-}
- // Added to return icons to idle state on end of combat
-function onDeleteCombat (combat, _, userId) {
-	if (game.userId !== userId) {
-		// Only act if we initiated the update ourselves
-		return;
-	}
-	var combatant;
-	for  (combatant of combat.combatants) {
-		const actorEntity = game.actors.get(combatant.actor.data._id);
-		const tokenImgPath = getStateTokenImgPath(actorEntity, false);
-		updateTokenImg(combatant.token._id, true, tokenImgPath, combat.data.scene);
-	}
 }
 
 function getStateTokenImgPath (actorEntity, inCombat) {
