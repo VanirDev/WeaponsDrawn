@@ -9,6 +9,10 @@ A visual utility plugin, which allows characters to have a secondary token image
 <details>
   <summary>Click to Expand</summary>
   
+  ### Release 0.2 - Compatability and Bug Fixing
+  * Removed support for WD icons in the combat tracker due to inconsistent permissions needed to change them.
+  * Removed unnecessary dependencies on the dnd5e system. Weapons Drawn is now likely compatible with any system that doesn't alter the token system!
+
   ### Release 0.1
   
   * Initial release, allowing for per-actor configuration of tokens, with a per-actor toggle for WD tokens.

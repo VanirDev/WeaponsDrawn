@@ -1,11 +1,8 @@
 {
     "name": "WeaponsDrawn",
     "title": "Weapons Drawn",
-    "description": "A module for D&D 5e, that will automatically swap to an alternate token image when in the combat state.",
-    "systems": [
-      "dnd5e"
-    ],
-    "version": "0.1",
+    "description": "A module that automatically swap to an alternate token image when in the combat state.",
+    "version": "0.2",
     "author": "Vanir#0001 (discord)",
     "esmodules": [
       "WeaponsDrawn.js"

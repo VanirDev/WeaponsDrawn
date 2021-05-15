@@ -3,44 +3,22 @@
  * Software License: Creative Commons Attributions International License
  */
 
-// Import JavaScript modules
 import { registerSettings } from './module/settings.js';
 import { preloadTemplates } from './module/preloadTemplates.js';
-import { DND5E } from "../../systems/dnd5e/module/config.js";
 
-/* ------------------------------------ */
-/* CONSTANTS							*/
-/* ------------------------------------ */
 const defaultIcon = 'icons/svg/mystery-man.svg';
 
-/* ------------------------------------ */
-/* Initialize module					*/
-/* ------------------------------------ */
 Hooks.once('init', async function () {
 	console.log('Weapons Drawn | Initializing WeaponsDrawn');
-	// Assign custom classes and constants here
-
-	// Register custom module settings
 	registerSettings();
 	//CONFIG.debug.hooks = true; // For debugging only
-	// Preload Handlebars templates
 	await preloadTemplates();
-
-	// Register custom sheets (if any)
 });
 
-/* ------------------------------------ */
-/* Setup module							*/
-/* ------------------------------------ */
 Hooks.once('setup', function () {
-	// Do anything after initialization but before ready
 });
 
-/* ------------------------------------ */
-/* When ready							*/
-/* ------------------------------------ */
 Hooks.once('ready', function () {
-	// Do anything once the module is ready
 });
 
 Hooks.on('renderTokenConfig', onRenderTokenConfig);
@@ -50,7 +28,6 @@ Hooks.on('createToken', onCreateToken);
 
 function onCreateToken (scene, token, _, userId) {
 	if (game.userId !== userId) {
-		// Only act if we initiated the update ourselves
 		return;
 	}
 
@@ -59,21 +36,17 @@ function onCreateToken (scene, token, _, userId) {
 
 function onCreateCombatant (combat, combatant, _, userId) {
 	if (game.userId !== userId) {
-		// Only act if we initiated the update ourselves
 		return;
 	}
 
 	let token = game.scenes.get(combat.data.scene).getEmbeddedEntity("Token", combatant.tokenId);
-	//console.log(JSON.stringify(token));
 	const actorEntity = game.actors.get(token.actorId);
 	const tokenImgPath = getStateTokenImgPath(actorEntity, true);
-	combat.updateCombatant({_id:combatant._id, img: tokenImgPath});
 	updateTokenImg(token._id, true, tokenImgPath, combat.data.scene);
 }
 
 function onDeleteCombatant (combat, combatant, _, userId) {
 	if (game.userId !== userId) {
-		// Only act if we initiated the update ourselves
 		return;
 	}
 
@@ -89,8 +62,6 @@ function getStateTokenImgPath (actorEntity, inCombat) {
 	if (actorEntity.data.flags.hasOwnProperty("WeaponsDrawn")) {
 		idleTokenImage = actorEntity.getFlag("WeaponsDrawn", "idle");
 		combatTokenImage = actorEntity.getFlag("WeaponsDrawn", "combat");
-		// console.log(idleTokenImage);
-		// console.log(combatTokenImage);
 	}
 	if (idleTokenImage == "" || idleTokenImage == undefined) {
 		idleTokenImage = actorEntity.data.img;
@@ -99,15 +70,11 @@ function getStateTokenImgPath (actorEntity, inCombat) {
 		}
 	}
 
-	// console.log(idleTokenImage);
-	// console.log(combatTokenImage);
 	return inCombat ? combatTokenImage : idleTokenImage;
 }
 
 function updateTokenImg (tokenId, inCombat, tokenImgPath, sceneId) {
 	tokenImgPath = tokenImgPath == undefined ? getStateTokenImgPath(game.actors.get(game.scenes.get(sceneId).getEmbeddedEntity("Token", tokenId).actorId), inCombat) : tokenImgPath;
-	// console.log(tokenId);
-	// console.log(sceneId);
 	if (game.actors.get(game.scenes.get(sceneId).getEmbeddedEntity("Token", tokenId).actorId).getFlag("WeaponsDrawn", "enabled")) {
 		game.scenes.get(sceneId).updateEmbeddedEntity("Token", {_id: tokenId, img:tokenImgPath});
 	}
@@ -118,9 +85,6 @@ function onRenderTokenConfig (tokenConfig, html) {
 	const saveButton = html.find($('button[name="submit"]'))
 	let actorEntity = game.actors.get(tokenConfig.actor.data._id);
 	console.log(tokenImageDiv.parent());
-	// console.log(tokenImageDiv);
-	// console.log(saveButton);
-	// console.log(actorEntity);
 
 	let idleTokenImage = "";
 	let combatTokenImage = "";
@@ -189,7 +153,6 @@ function onRenderTokenConfig (tokenConfig, html) {
 	html.find($('#WDIdleTokenButton')).click(async (ev) => {
 		await new FilePicker({ type:"image", current:idleTokenImage, callback: (path) => {
 			html.find($("#WDIdleTokenPathBox")).val(path);
-			//$('input[name="img"]').val(path);
 			idleTokenImage = path;
 		}}).render(true);
 	});
@@ -226,7 +189,6 @@ function onRenderTokenConfig (tokenConfig, html) {
 		game.combats.forEach((combat, combatKey) => {
 			combat = game.combats.get(combatKey);
 			if (combat.data.active) {
-				//console.log(combat);
 				combat.data.combatants.forEach(combatant => {
 					if (combatant.actor.data._id == actorEntity.data._id) {
 						combat.updateCombatant({_id:combatant._id, img: combatTokenImage});
@@ -246,9 +208,5 @@ function onRenderTokenConfig (tokenConfig, html) {
 				}
 			})
 		})
-
-		// console.log(inCombatTokens);
-		// console.log(idleTokens);
-		// console.log(game.scenes);
 	});
 }
