@@ -1,0 +1,13 @@
+{
+    "name": "token-wardrobe",
+    "title": "Token Wardrobe",
+    "description": "A module for FoundryVTT that allows you to swap between multiple token images.",
+    "version": "1.0",
+    "author": "Vanir#0001 (discord)",
+    "type": "module",
+    "esmodules": ["tokenWardrobe.js"],
+    "minimumCoreVersion": "9",
+    "compatibleCoreVersion": "9",
+    "url": "",
+    "manifest": ""
+}
