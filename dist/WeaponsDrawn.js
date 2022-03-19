@@ -11,7 +11,7 @@ const defaultIcon = 'icons/svg/mystery-man.svg';
 Hooks.once('init', async function () {
 	console.log('Weapons Drawn | Initializing WeaponsDrawn');
 	registerSettings();
-	//CONFIG.debug.hooks = true; // For debugging only
+	CONFIG.debug.hooks = true; // For debugging only
 	await preloadTemplates();
 });
 
@@ -34,25 +34,34 @@ function onCreateToken (scene, token, _, userId) {
 	updateTokenImg(token._id, false, undefined, scene._id);
 }
 
-function onCreateCombatant (combat, combatant, _, userId) {
+function onCreateCombatant (combatant, _, userId) {
 	if (game.userId !== userId) {
 		return;
 	}
 
-	let token = game.scenes.get(combat.data.scene).getEmbeddedEntity("Token", combatant.tokenId);
-	const actorEntity = game.actors.get(token.actorId);
-	const tokenImgPath = getStateTokenImgPath(actorEntity, true);
-	updateTokenImg(token._id, true, tokenImgPath, combat.data.scene);
+	try {
+		let combat = combatant.parent;
+		let token = game.scenes.get(combat.data.scene).tokens.get(combatant.data.tokenId);
+		const actorEntity = game.actors.get(token.actor.id);
+		const tokenImgPath = getStateTokenImgPath(actorEntity, true);
+		updateTokenImg(combatant.data.tokenId, true, tokenImgPath, combat.data.scene);
+	} catch (error) {}
+	
 }
 
-function onDeleteCombatant (combat, combatant, _, userId) {
+function onDeleteCombatant (combatant, _, userId) {
 	if (game.userId !== userId) {
 		return;
 	}
 
-	const actorEntity = game.actors.get(combatant.actor.data._id);
-	const tokenImgPath = getStateTokenImgPath(actorEntity, false);
-	updateTokenImg(combatant.token._id, true, tokenImgPath, combat.data.scene);
+	try {
+		let combat = combatant.parent;
+		let token = game.scenes.get(combat.data.scene).tokens.get(combatant.data.tokenId);
+		const actorEntity = game.actors.get(token.actor.id);
+		const tokenImgPath = getStateTokenImgPath(actorEntity, false);
+		updateTokenImg(combatant.data.tokenId, true, tokenImgPath, combat.data.scene);
+	} catch (error) {}
+	
 }
 
 function getStateTokenImgPath (actorEntity, inCombat) {
@@ -74,9 +83,11 @@ function getStateTokenImgPath (actorEntity, inCombat) {
 }
 
 function updateTokenImg (tokenId, inCombat, tokenImgPath, sceneId) {
-	tokenImgPath = tokenImgPath == undefined ? getStateTokenImgPath(game.actors.get(game.scenes.get(sceneId).getEmbeddedEntity("Token", tokenId).actorId), inCombat) : tokenImgPath;
-	if (game.actors.get(game.scenes.get(sceneId).getEmbeddedEntity("Token", tokenId).actorId).getFlag("WeaponsDrawn", "enabled")) {
-		game.scenes.get(sceneId).updateEmbeddedEntity("Token", {_id: tokenId, img:tokenImgPath});
+	tokenImgPath = tokenImgPath == undefined ? getStateTokenImgPath(game.actors.get(game.scenes.get(sceneId).tokens.get(tokenId).data.actorId), inCombat) : tokenImgPath;
+
+	if (game.actors.get(game.scenes.get(sceneId).tokens.get(tokenId).data.actorId).getFlag("WeaponsDrawn", "enabled")) {
+		let token = game.scenes.get(sceneId).tokens.get(tokenId);
+		token.update({_id: tokenId, img:tokenImgPath});
 	}
 }
 
