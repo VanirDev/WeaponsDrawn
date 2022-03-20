@@ -1,6 +1,8 @@
 export interface TokenImage {
     scale: number,
     path: string,
+    horizontallyMirrored: boolean,
+    verticallyMirrored: boolean
 }
 
 export interface TokenOutfit {

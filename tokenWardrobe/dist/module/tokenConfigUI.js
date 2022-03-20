@@ -6,14 +6,10 @@ function createWardrobeButton() {
     return newRow;
 }
 function buttonEventHandler(event, data) {
-    let wardrobe = new WardrobeApplication({
-        msg: "Hiya this is a test!",
-        color: "red"
-    }, data);
-    wardrobe.render(true, { width: 400, height: 300 });
+    let wardrobe = new WardrobeApplication({ outfits: WardrobeApplication.getWardrobe(data) }, data);
+    wardrobe.render(true, { width: 480 });
 }
 export function AddWardrobeConfigButton(app, html, data) {
-    console.log(app.object);
     if (app.object instanceof Actor) {
         const newButton = createWardrobeButton();
         $(newButton).on("click", ((event) => buttonEventHandler(event, app.object)));

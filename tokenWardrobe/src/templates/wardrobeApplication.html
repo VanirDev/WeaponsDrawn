@@ -1,8 +1,15 @@
 <form class="flexcol">
     <div class="form-group">
-        <label for="exampleInput">Example Input</label>
-        <input type="text" name="exampleInput" style="color: {{color}}" value="{{msg}}">
+        <label for="outfits">Outfits</label>
+        <button type="button" name="createNew" id="createOutfitButton">
+            <i class="fa fa-plus"></i> New Outfit
+        </button>
     </div>
+    <select>
+        {{#each outfits}}
+            <label>{{name}}</label>
+        {{/each}}
+    </select>
     <footer class="sheet-footer flexrow">
         <button type="submit" name="submit">
             <i class="fa fa-check"></i> OK

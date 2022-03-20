@@ -6,22 +6,18 @@ function createWardrobeButton():HTMLDivElement {
     newRow.classList.add("form-group");
     newRow.innerHTML = `<button type="button"><i class="fas fa-tshirt fa-fw"></i><label> Token Wardrobe</label></button>`
 
-    return newRow
+    return newRow;
 }
 
 function buttonEventHandler(event: any, data:Actor) {
     let wardrobe = new WardrobeApplication(
-        {
-            msg:"Hiya this is a test!",
-            color: "red"
-        }, 
+        {outfits: WardrobeApplication.getWardrobe(data)}, 
         data
     );
-    wardrobe.render(true, {width: 400, height:300});
+    wardrobe.render(true, {width: 480});
 }
 
 export function AddWardrobeConfigButton(app:FormApplication, html:JQuery, data:object) {
-    console.log(app.object);
     if (app.object instanceof Actor) {
         const newButton = createWardrobeButton()
 
