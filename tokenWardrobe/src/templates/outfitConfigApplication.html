@@ -28,16 +28,16 @@
         <div class="form-group">
             <label>Image Path</label>
             <div class="form-fields">
-                <button type="button" class="file-picker" data-type="imagevideo" data-target="passive.path" title="Browse Files" tabindex="-1">
+                <button type="button" class="file-picker" data-type="imagevideo" data-target="passivePath" title="Browse Files" tabindex="-1">
                     <i class="fas fa-file-import fa-fw"></i>
                 </button>
-                <input class="image" type="text" name="passive.path" placeholder="path/image.png">
+                <input class="image" type="text" name="passivePath" placeholder="path/image.png">
             </div>
         </div>
         <div class="form-group">
             <label>Scale <span class="units">(Ratio)</span></label>
             <div class="form-fields">
-                <input type="range" name="passive.scale" value="1" min="0.2" max="3.0" step="0.1">
+                <input type="range" name="passiveScale" value="{{outfit.passive.scale}}" min="0.2" max="3.0" step="0.1">
                 <span class="range-value">1</span>
             </div>
         </div>
@@ -45,9 +45,9 @@
             <label>Mirror Image</label>
             <div class="form-fields">
                 <label for="horizontal">Horizontally</label>
-                <input type="checkbox" name="passive.horizontallyMirrored" value="{{outfit.passive.horizontallyMirrored}}">
+                <input type="checkbox" name="passiveHorizontallyMirrored" value="{{outfit.passive.horizontallyMirrored}}">
                 <label for="vertical">Vertically</label>
-                <input type="checkbox" name="passive.verticallyMirrored" value="{{outfit.passive.verticallyMirrored}}">
+                <input type="checkbox" name="passiveVerticallyMirrored" value="{{outfit.passive.verticallyMirrored}}">
             </div>
         </div>
         <div {{#unless usesCombatVariant}}style="display:none;"{{/unless}}>
@@ -56,26 +56,26 @@
                 <div class="form-group">
                     <label>Image Path</label>
                     <div class="form-fields">
-                        <button type="button" class="file-picker" data-type="imagevideo" data-target="img" title="Browse Files" tabindex="-1">
+                        <button type="button" class="file-picker" data-type="imagevideo" data-target="combatPath" title="Browse Files" tabindex="-1">
                             <i class="fas fa-file-import fa-fw"></i>
                         </button>
-                        <input class="image" type="text" name="idlePath" placeholder="path/image.png">
+                        <input class="image" type="text" name="combatPath" placeholder="path/image.png">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Scale <span class="units">(Ratio)</span></label>
                     <div class="form-fields">
-                        <input type="range" name="idleScale" value="1" min="0.2" max="3.0" step="0.1">
+                        <input type="range" name="combatScale" value="{{outfit.combat.scale}}" min="0.2" max="3.0" step="0.1">
                         <span class="range-value">1</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="outfitName">Mirror Image</label>
+                    <label">Mirror Image</label>
                     <div class="form-fields">
                         <label for="horizontal">Horizontally</label>
-                        <input type="checkbox" name="idleHorizontal" value="{{horizontallyMirrored}}">
+                        <input type="checkbox" name="combatHorizontallyMirrored" value="{{outfit.combat.horizontallyMirrored}}">
                         <label for="vertical">Vertically</label>
-                        <input type="checkbox" name="idleVertical" value="{{verticallyMirrored}}">
+                        <input type="checkbox" name="combatVerticallyMirrored" value="{{outfit.combat.verticallyMirrored}}">
                     </div>
                 </div>
             </div>
