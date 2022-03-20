@@ -6,7 +6,7 @@ function buttonEventHandler(event: any, data:TokenOutfit) {
         {},
         data
     );
-    outfitConfigApplication.render(true, {width:480, height:600});
+    outfitConfigApplication.render(true, {width:480});
 }
 
 export interface WardrobeOptions {outfits: TokenOutfit[]}

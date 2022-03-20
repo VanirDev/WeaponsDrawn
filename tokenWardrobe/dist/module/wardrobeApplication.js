@@ -1,7 +1,7 @@
 import { OutfitConfigApplication } from "./outfitApplication.js";
 function buttonEventHandler(event, data) {
     let outfitConfigApplication = new OutfitConfigApplication({}, data);
-    outfitConfigApplication.render(true, { width: 480, height: 600 });
+    outfitConfigApplication.render(true, { width: 480 });
 }
 export class WardrobeApplication extends FormApplication {
     constructor(wardrobeOptions, actor) {

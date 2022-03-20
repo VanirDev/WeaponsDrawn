@@ -29,8 +29,8 @@ export class OutfitConfigApplication extends FormApplication {
             template: `modules/token-wardrobe/templates/outfitConfigApplication.html`,
             id: `outfit-config-application`,
             title: `Token Outfit`,
-            closeOnSubmit: false,
-            submitOnChange: true
+            closeOnSubmit: true,
+            submitOnChange: false
         });
     }
     getData() {
@@ -40,6 +40,22 @@ export class OutfitConfigApplication extends FormApplication {
     activateListeners(html) {
         console.log("LISTENERS ACTIVATED");
         super.activateListeners(html);
+        let combatVariantCheckbox = html.find("[name='usesCombatVariant']");
+        let combatVariantImage = html.find("#combatTokenImg");
+        let passiveLabel = html.find("#passiveLabel");
+        let combatVariantDiv = html.find("#combatVariantDiv");
+        combatVariantCheckbox.on("change", function (event) {
+            if ($(this).is(":checked")) {
+                combatVariantImage.show();
+                passiveLabel.show();
+                combatVariantDiv.show();
+            }
+            else {
+                combatVariantImage.hide();
+                passiveLabel.hide();
+                combatVariantDiv.hide();
+            }
+        });
     }
     _updateObject(event, formData) {
         var _a;

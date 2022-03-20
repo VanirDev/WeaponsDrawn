@@ -2,9 +2,7 @@
     <div>
         <div class="form-group">
             <img src="{{passivePath}}" id="passiveTokenImg" style="max-width: 50%; margin:auto;">
-            {{#if usesCombatVariant}}
-            <img src="{{combatPath}}" id="combatTokenImg" style="max-width: 50%;">
-            {{/if}}
+            <img src="{{combatPath}}" id="combatTokenImg" style="max-width: 50%; {{#unless usesCombatVariant}}display:none;{{/unless}}">
         </div>
         <div>
             <div class="form-group">
@@ -22,9 +20,7 @@
         justify-content: flex-end;
         flex-direction: column;
     ">
-        {{#if usesCombatVariant}}
-            <label>Out of Combat</label>
-        {{/if}}
+        <label id="passiveLabel">Out of Combat</label>
         <div class="form-group">
             <label>Image Path</label>
             <div class="form-fields">
@@ -50,7 +46,7 @@
                 <input type="checkbox" name="passiveVerticallyMirrored" value="{{outfit.passive.verticallyMirrored}}">
             </div>
         </div>
-        <div {{#unless usesCombatVariant}}style="display:none;"{{/unless}}>
+        <div id="combatVariantDiv" {{#unless usesCombatVariant}}style="display:none;"{{/unless}}>
             <label>In Combat</label>
             <div>
                 <div class="form-group">
